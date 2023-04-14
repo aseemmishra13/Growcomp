@@ -1,8 +1,9 @@
 from bs4 import BeautifulSoup
 import requests
 import pandas as pd
+import json
 
-search='bread'
+search='pringle'
 URL='https://www.walmart.com/search?q='+search+'&catId=976759'
 
 
@@ -16,14 +17,25 @@ count=0
 titles = soup.find_all("span", attrs={'class':'w_V_DM'})
 price= soup.find_all("div", attrs={'data-automation-id':'product-price'})
 rating = soup.find_all("div", attrs={'class':'flex items-center mt2'})
+image= soup.find_all("img", attrs={'data-testid':'productTileImage'})
 
+list1=[]
 for i in range(0,len(titles)):
     count+=1
     print(titles[i].text)
+    
    
     
-    print(price[i].text)
-    if(count<=len(rating)):
+    
+    if(count<=len(image)):
         print(rating[i].text[2:])
- 
+        print(price[i].text)
+        print(image[i]['src'])
+        list1.append({'id':i,'title':titles[i].text,'price':price[i].text,'image':image[i]['src']} )
+
+print(list1)          
+json_output = json.dumps(list1)
+
+# Print JSON output
+print(json_output)
  
